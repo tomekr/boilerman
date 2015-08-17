@@ -16,3 +16,8 @@ function removeWithActionItem() {
   //TODO: Implement this
   console.log("TODO: IMPLEMENT removeWithActionItem()");
 }
+
+function removeController() {
+  //TODO: Implement this
+  console.log("TODO: IMPLEMENT removeController()");
+}

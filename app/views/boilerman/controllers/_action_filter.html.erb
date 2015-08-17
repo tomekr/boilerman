@@ -17,12 +17,10 @@
           <li class="list-group-item">No action filters currently set</li>
       <% else %>
         <% @action_with_filters.each do |action_filter| %>
-          <li class="list-group-item">
-            <button onclick="removeWithActionItem()" type="button" class="btn btn-danger btn-xs">
-              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </button>
+          <a href="#" onclick="removeWithActionItem()" class="list-group-item">
             <%= action_filter %>
-          </li>
+            <span class="glyphicon glyphicon-remove pull-right list-group-span" aria-hidden="true"></span>
+          </a>
         <% end %>
       <% end %>
     </ul>
@@ -44,12 +42,10 @@
           <li class="list-group-item">No action filters currently set</li>
       <% else %>
         <% @action_without_filters.each do |action_filter| %>
-          <li class="list-group-item">
-              <button onclick="removeWithoutActionItem()" type="button" class="btn btn-danger btn-xs">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-              </button>
+          <a href="#" onclick="removeWithoutActionItem()" class="list-group-item">
             <%= action_filter %>
-          </li>
+            <span class="glyphicon glyphicon-remove pull-right list-group-span" aria-hidden="true"></span>
+          </a>
         <% end %>
       <% end %>
     </ul>

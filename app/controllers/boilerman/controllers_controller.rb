@@ -5,7 +5,7 @@ module Boilerman
     def index
       @action_with_filters = [:require_admin, :require_staff]
       @action_without_filters = [:verify_authenticity_token]
-      @controller_filters = []
+      @controller_filters = ["ApplicationController"]
 
       @controllers = filtered_controllers
       @controllers_and_callbacks = @controllers.map do |controller|

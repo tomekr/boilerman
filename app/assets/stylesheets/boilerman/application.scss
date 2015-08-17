@@ -69,3 +69,11 @@ table {
 }
 
 .top-buffer { margin-top:20px; }
+
+.list-group-span {
+  display: none;
+}
+
+a:hover .list-group-span{
+     display: block;
+}
