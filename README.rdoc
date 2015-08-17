@@ -1,5 +1,0 @@
-= Boilerman
-
-Currently supports Rails versions 3.2 and greater.
-
-This project rocks and uses MIT-LICENSE.
