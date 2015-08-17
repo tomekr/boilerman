@@ -1,0 +1,9 @@
+<table class="table">
+  <% @controllers.each_slice(5) do |controller_slice| %>
+    <tr>
+      <% controller_slice.each do |controller| %>
+        <td><%= controller %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>

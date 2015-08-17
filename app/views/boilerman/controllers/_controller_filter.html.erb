@@ -1,0 +1,29 @@
+<h4>Controllers</h4>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-success" type="button">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          Include
+        </button>
+      </span>
+      <input type="text" class="form-control" placeholder="Filters by controller name...">
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+
+  <div class="col-lg-6">
+    <div class="row">
+      <ul class="list-group" id="include-controllers">
+        <% if @controller_filters.empty? %>
+            <li class="list-group-item">No controller filters currently set</li>
+        <% else %>
+          <% @controller_filters.each do |action_filter| %>
+            <li class="list-group-item">Cras justo odio</li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->

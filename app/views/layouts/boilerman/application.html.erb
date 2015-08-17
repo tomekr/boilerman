@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boilerman</title>
+  <%= include_gon %>
+  <%= stylesheet_link_tag    "boilerman/application", media: "all" %>
+  <%= javascript_include_tag "boilerman/application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+    <header class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <%= link_to "Boilerman", '#', id: "logo" %>
+        <nav>
+          <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to "Controllers",   '#' %></li>
+            <li><%= link_to "Checks",   '#' %></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+</html>
+</html>

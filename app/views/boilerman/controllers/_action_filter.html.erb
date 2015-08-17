@@ -1,0 +1,58 @@
+<h4>Actions</h4>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-success" type="button">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          With
+        </button>
+      </span>
+      <input type="text" class="form-control" placeholder="(e.g. require_admin)">
+    </div><!-- /input-group -->
+
+    <ul class="list-group top-buffer" id="with-actions">
+      <% if @action_with_filters.empty? %>
+          <li class="list-group-item">No action filters currently set</li>
+      <% else %>
+        <% @action_with_filters.each do |action_filter| %>
+          <li class="list-group-item">
+            <button onclick="removeWithActionItem()" type="button" class="btn btn-danger btn-xs">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </button>
+            <%= action_filter %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+
+  </div><!-- /.col-lg-6 -->
+  <div class="col-lg-6">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-danger" type="button">
+          <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+          Without
+        </button>
+      </span>
+      <input type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
+    </div><!-- /input-group -->
+
+    <ul class="list-group top-buffer" id="without-actions">
+      <% if @action_without_filters.empty? %>
+          <li class="list-group-item">No action filters currently set</li>
+      <% else %>
+        <% @action_without_filters.each do |action_filter| %>
+          <li class="list-group-item">
+              <button onclick="removeWithoutActionItem()" type="button" class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+              </button>
+            <%= action_filter %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
