@@ -16,9 +16,15 @@ module Boilerman
     # See http://edgeguides.rubyonrails.org/configuring.html#initialization-events
     class InitializationHooks < Rails::Railtie
       config.before_initialize do |app|
-        # Force eager loading of namespaces so that Boilerman has immeddiate
-        # access to all controllers and models in development enviornments.
-        app.config.eager_load = true
+        if Rails.env.development?
+          # Force eager loading of namespaces so that Boilerman has immeddiate
+          # access to all controllers and models in development enviornments.
+          #
+          # Note, this will not propogate code changes and will require server
+          # restarts if you change code.
+          app.config.eager_load = true
+          app.config.cache_classes = true
+        end
       end
     end
 end
