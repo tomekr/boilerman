@@ -19,7 +19,7 @@
           <li class="list-group-item">No controller filters currently set</li>
       <% else %>
         <% @controller_filters.each do |controller_filter| %>
-          <a href="#" onclick="removeController()" class="list-group-item">
+          <a href="#" onclick="removeController(this)" class="list-group-item">
             <%= controller_filter %>
             <span class="glyphicon glyphicon-remove pull-right list-group-span" aria-hidden="true"></span>
           </a>

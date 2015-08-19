@@ -23,46 +23,37 @@ $( document ).ready(function() {
   });
 });
 
-function clearLocalFilters() {
-    var x;
-    if (confirm("Are you sure you want to clear your saved filters?") == true) {
-      alert(gon.controllers);
-      console.log("Clearing local storage");
-    }
+function removeController(list_item) {
+  var index = window.controller_filters.indexOf(list_item.text);
+  if (index > -1) {
+    window.controller_filters.splice(index, 1);
+  }
+
+  list_item.remove();
+
+  update_page();
 }
 
-function action_with_filter() {
-  console.log("TODO: Implement action_with_filter()");
-}
+function update_page() {
+  // Clear the value in the input field
+  var rows = $("#callbackBreakdownTbl").find("tr.callback_lineitem").hide();
 
-function action_without_filter() {
-  console.log("TODO: Implement action_without_filter()");
-}
-function removeWithoutActionItem() {
-  //TODO: Implement this
-  console.log("TODO: IMPLEMENT removeWithoutActionItem()");
-}
-
-
-function removeWithActionItem() {
-  //TODO: Implement this
-  console.log("TODO: IMPLEMENT removeWithActionItem()");
-}
-
-function removeController() {
-  //TODO: Implement this
-  console.log("TODO: IMPLEMENT removeController()");
-}
-
-function removeControllerFromList(id) {
-
+  if (window.controller_filters.length == 0) {
+    rows.show();
+    $("#include-controllers").find("li.list-group-item").show();
+  }
+  else {
+    var data = window.controller_filters;
+    $.each(data, function (i, v) {
+        rows.filter(":contains('" + v + "')").show();
+    });
+    $("#include-controllers").find("li.list-group-item").hide();
+  }
 }
 
 function filterController() {
   var filter_input = $("#controller_filter_input")[0];
 
-  // Clear the value in the input field
-  var rows = $("#callbackBreakdownTbl").find("tr.callback_lineitem").hide();
   if (filter_input.value.length) {
       // Add the filter to the global array of controller filters
       window.controller_filters.push(filter_input.value);
@@ -70,14 +61,10 @@ function filterController() {
       // Add this filter to the controller filter list group
       update_controller_filter_list(filter_input.value);
 
-      var data = window.controller_filters;
-      $.each(data, function (i, v) {
-          rows.filter(":contains('" + v + "')").show();
-      });
   } else rows.show();
 
   $("#controller_filter_input").val('');
-  check_for_empty_controller_list();
+  update_page();
 }
 
 function update_controller_filter_list(filter) {
@@ -87,11 +74,10 @@ function update_controller_filter_list(filter) {
 }
 
 function build_list_group_item(filter) {
-  console.log(window.controller_filters);
   var list_item = $('<a>',{
       text: filter,
       href: '#',
-      onclick: "removeController()",
+      onclick: "removeController(this)",
       class: "list-group-item"
   })
 
@@ -103,13 +89,27 @@ function build_list_group_item(filter) {
   list_item.appendTo('#include-controllers');
 }
 
-function check_for_empty_controller_list() {
-  // Show or Hide the "No controller filters currently set" based on if if the
-  // list is empty
-  if(window.controller_filters.length == 0) {
-    $("#include-controllers").find("li.list-group-item").show();
-  } else {
-    $("#include-controllers").find("li.list-group-item").hide();
-  }
+// TODO
+function action_with_filter() {
+  console.log("TODO: Implement action_with_filter()");
 }
 
+function action_without_filter() {
+  console.log("TODO: Implement action_without_filter()");
+}
+function removeWithoutActionItem() {
+  //TODO: Implement this
+  console.log("TODO: IMPLEMENT removeWithoutActionItem()");
+}
+function removeWithActionItem() {
+  //TODO: Implement this
+  console.log("TODO: IMPLEMENT removeWithActionItem()");
+}
+function clearLocalFilters() {
+  // TODO
+  var x;
+  if (confirm("Are you sure you want to clear your saved filters?") == true) {
+    alert(gon.controllers);
+    console.log("Clearing local storage");
+  }
+}
