@@ -3,7 +3,6 @@ require_dependency "boilerman/application_controller"
 module Boilerman
   class ControllersController < ApplicationController
     def index
-      Rails.application.eager_load!
       @action_with_filters = []
       @action_without_filters = []
       @controller_filters = []
