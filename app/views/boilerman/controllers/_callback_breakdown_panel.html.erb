@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab" id="headingOne">
+    <h4 class="panel-title">
+      <a role="button" data-toggle="collapse"  href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Callback Breakdown
+      </a>
+    </h4>
+  </div>
+  <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+    <div class="panel-body">
+      <table id="callbackBreakdownTbl" class="table">
+        <thead>
+          <th>Controller</th>
+          <th>Filters</th>
+        </thead>
+        <tbody>
+          <% @controllers_and_callbacks.each do |controller, callbacks| %>
+            <tr class="callback_lineitem"> 
+              <td><%= controller %></td>
+              <td>
+                <table>
+                  <% callbacks.each do |callback| %>
+                    <tr>
+                      <td><%= callback %></td>
+                    </tr>
+                  <% end %>
+                </table>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

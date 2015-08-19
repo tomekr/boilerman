@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab" id="headingThree">
+    <h4 class="panel-title">
+      <a class="collapsed" role="button" data-toggle="collapse"  href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Application Statistics
+      </a>
+    </h4>
+  </div>
+  <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+    <div class="panel-body">
+      <div>
+        <p>Number of Controllers: <%= @controllers.count %></p>
+
+        <h3>Namespace Breakdown</h3>
+        <p>Devise: 13 controllers</p>
+        <p>Admin: 17 controllers</p>
+
+      </div>
+    </div>
+  </div>
+</div>

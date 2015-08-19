@@ -23,7 +23,7 @@ module Boilerman
           # Note, this will not propogate code changes and will require server
           # restarts if you change code.
           app.config.eager_load = true
-          app.config.cache_classes = true
+          #app.config.cache_classes = true
         end
       end
     end

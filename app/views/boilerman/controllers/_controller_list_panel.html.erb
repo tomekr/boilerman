@@ -1,0 +1,22 @@
+<div class="panel panel-default">
+  <div class="panel-heading" role="tab" id="headingTwo">
+    <h4 class="panel-title">
+      <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Controller List
+      </a>
+    </h4>
+  </div>
+  <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+    <div class="panel-body">
+      <table class="table">
+        <% @controllers.each_slice(5) do |controller_slice| %>
+          <tr>
+            <% controller_slice.each do |controller| %>
+              <td><%= controller %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

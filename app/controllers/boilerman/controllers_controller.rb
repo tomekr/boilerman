@@ -3,9 +3,10 @@ require_dependency "boilerman/application_controller"
 module Boilerman
   class ControllersController < ApplicationController
     def index
-      @action_with_filters = [:require_admin, :require_staff]
-      @action_without_filters = [:verify_authenticity_token]
-      @controller_filters = ["ApplicationController"]
+      Rails.application.eager_load!
+      @action_with_filters = []
+      @action_without_filters = []
+      @controller_filters = []
 
       @controllers = filtered_controllers
       @controllers_and_callbacks = @controllers.map do |controller|

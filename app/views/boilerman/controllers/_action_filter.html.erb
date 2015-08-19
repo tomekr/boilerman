@@ -4,12 +4,12 @@
   <div class="col-lg-6">
     <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-success" type="button">
+        <button id="action_with_filter_input_btn" class="btn btn-success" type="button" onclick="action_with_filter()">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           With
         </button>
       </span>
-      <input type="text" class="form-control" placeholder="(e.g. require_admin)">
+      <input id="action_with_filter_input" type="text" class="form-control" placeholder="(e.g. require_admin)" >
     </div><!-- /input-group -->
 
     <ul class="list-group top-buffer" id="with-actions">
@@ -29,12 +29,12 @@
   <div class="col-lg-6">
     <div class="input-group">
       <span class="input-group-btn">
-        <button class="btn btn-danger" type="button">
+        <button id="action_without_filter_input_btn" class="btn btn-danger" type="button" onclick="action_without_filter()">
           <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
           Without
         </button>
       </span>
-      <input type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
+      <input id="action_without_filter_input" type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
     </div><!-- /input-group -->
 
     <ul class="list-group top-buffer" id="without-actions">
