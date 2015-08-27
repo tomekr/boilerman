@@ -1,4 +1,5 @@
 require "boilerman/engine"
+require "boilerman/actions"
 
 module Boilerman
     def self.eager_load_rails_paths
