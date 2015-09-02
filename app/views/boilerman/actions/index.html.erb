@@ -1,1 +1,47 @@
-<%= @msg %>
+<div class="row">
+  <table id="controller_action_table" class="table table-bordered">
+    <thead>
+      <th>Controller</th>
+      <th>Actions</th>
+      <th>Filters</th>
+    </thead>
+    <tbody>
+      <% @action_filter_hash.each do |controller, actions| %>
+        <tr>
+
+          <td rowspan="<%= actions.map{|_, filters| filters}.flatten.count %>"><%= controller %></td>
+          <% actions.each_with_index do |(action, filters),index| %>
+            <% next if filters.empty? %>
+
+            <% if index == 0 %>
+              <td rowspan="<%= filters.count %>"><%= action %></td>
+              <% filters.each_with_index do |filter, index| %>
+                <% if index == 0 %>
+                  <td colspan="1"><%= filter %></td>
+                <% else %>
+                  <tr>
+                    <td colspan="1"><%= filter %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% else %>
+              <tr colspan="2">
+                <td rowspan="<%= filters.count %>"><%= action %></td>
+
+                <% filters.each_with_index do |filter, index| %>
+                <% if index == 0 %>
+                  <td colspan="1"><%= filter %></td>
+                <% else %>
+                  <tr>
+                    <td colspan="1"><%= filter %></td>
+                  </tr>
+                <% end %>
+                <% end %>
+              </tr>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

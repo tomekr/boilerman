@@ -17,17 +17,21 @@ module Boilerman
       #
       # {:controler_name1 => {"action1" => [filter1, filter2, ... , filterN]}}
       controller_action_hash = build_controller_action_list(routes)
-      controller_action_filter_hash = build_filter_list(controller_action_hash)
+      return build_filter_list(controller_action_hash)
     end
 
     private
 
     # Returns an array of strings as controller actions
-    def self.actions_from_conditional(conditional)
-      # Sometimes if it's a simple conditional, the if/unless value will just be a symbol (at least in Rails 4)
-      return [conditional.to_s] unless conditional.is_a? String
-
-      conditional.scan(/'(.+?)'/).flatten
+    def self.actions_from_conditional(conditionals)
+      if conditionals.size == 1
+      elsif conditionals.size > 1
+        conditionals.map do |conditional|
+          conditional.scan(/'(.+?)'/).flatten
+        end.flatten
+      else
+        return
+      end
     end
 
     def self.build_controller_action_list(routes)
@@ -74,14 +78,30 @@ module Boilerman
         actions.each{|a| controller_action_filter_hash[controller][a] = [] }
       end
 
-      # Initialize metadata keys
+      # Initialize metadata keys.
+      #
+      # _proc_conditionals: keeps track of filters that call Procs to
+      # decide whether or not a filter will be applied to an action.
+      #
+      # _method_conditionals: keeps track of filters that call methods within
+      # the controller to decide whether or not a filter will be applied to an
+      # action.
       controller_action_filter_hash[:_proc_conditionals] = {}
-      controller_action_filter_hash[:_non_action_filters] = {}
+      controller_action_filter_hash[:_method_conditionals] = {}
 
       # All right, now we have a mapping of routable controllers and actions in
       # the application. Let's collect the before_actions that get run on each
       # controller action.
       controller_action_hash.each do |controller, actions|
+
+        unless controller.respond_to?(:_process_action_callbacks)
+          #FIXME: change this metadata key name
+          controller_action_filter_hash[:_weird_controller] ||= []
+          controller_action_filter_hash[:_weird_controller] << controller
+          next
+        end
+
+
         # We only care about before_actions
         controller._process_action_callbacks.select{|c| c.kind == :before}.each do |callback|
 
@@ -113,8 +133,12 @@ module Boilerman
               controller_action_filter_hash[controller][action] << callback.filter
             end
           elsif !if_call.empty? # before_(filter|action) only: [:foo, :bar, :baz]
-            raise "more than 1" if if_call.length > 1
-            actions_to_filter = actions_from_conditional(if_call.first)
+
+            actions_to_filter = if_call.select{|call| call.is_a?(Symbol)}
+            actions_to_filter << actions_from_conditional(if_call.select{|call| call.is_a?(Array)})
+
+            actions_to_filter.flatten! unless actions_to_filter.empty?
+            actions_to_filter.compact! unless actions_to_filter.empty?
 
             actions_to_filter.each do |action|
               next unless actions.include?(action)
@@ -122,35 +146,32 @@ module Boilerman
             end
 
           elsif !unless_call.empty? # before_(filter|action) unless: [:qux]
-            raise "more than 1" if unless_call.length > 1
+            # Get all the symbols first
+            unless_actions = unless_call.select{|call| call.is_a?(Symbol)}
 
-            unless_actions = actions_from_conditional(unless_call.first)
-            puts unless_actions
+            # Now process any Array based conditionas
+            unless_actions << actions_from_conditional(unless_call.select{|call| call.is_a?(Array)})
+
+            unless_actions.flatten! unless unless_actions.empty?
+            unless_actions.compact! unless unless_actions.empty?
 
             # If the unless conditional isn't an action we won't include it because
             # similar to the proces this filter relies on the true/false output of a
             # method
             if (actions & unless_actions).empty?
-              controller_action_filter_hash[:_non_action_filters][controller] ||= []
-              controller_action_filter_hash[:_non_action_filters][controller] << {filter: callback.filter, conditional: unless_actions}
+              controller_action_filter_hash[:_method_conditionals][controller] ||= []
+              controller_action_filter_hash[:_method_conditionals][controller] << {filter: callback.filter, conditional: unless_actions}
               next
             end
 
-            puts "IN unless"
-            actions.reject{|a| unless_actions.include?(a)}.each do |action| 
-              puts "adding #{ callback.filter } for #{ controller }##{action}"
+            actions.reject{|a| unless_actions.include?(a)}.each do |action|
               controller_action_filter_hash[controller][action] << callback.filter
             end
-          else
-            puts
-            "*** you're not getting all the options"
-            puts
           end
         end
       end
       controller_action_filter_hash
     end
-
-
   end
 end
+
