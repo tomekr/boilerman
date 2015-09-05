@@ -8,7 +8,8 @@ module Boilerman
                           without_actions: [],
                           with_filters: [],
                           without_filters: [],
-                          ignore_filters: []}}
+                          ignore_filters: [],
+                          ignore_actions: []}}
 
       filters = params[:filters]
 

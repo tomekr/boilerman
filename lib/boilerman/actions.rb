@@ -16,6 +16,7 @@ module Boilerman
     without_filters    = filters[:without_filters]    || []
 
     ignore_filters     = filters[:ignore_filters]     || []
+    ignore_actions     = filters[:ignore_actions]     || []
 
       # Biggie Smalls... Biggie Smalls... Biggie Smalls....
       routes =  Rails.application.routes.routes.routes.select do |route|
@@ -28,7 +29,7 @@ module Boilerman
 
       # We only care about the defaults which will give us an array of
       # controller/action hashes. We're also going to rearrange things a bit so
-      # that the controller is the key and the value is an array of hashes that
+      # that the controller is the key and the value is another hash that
       # represent each action and it's corresponding filters. This will look
       # like:
       #
@@ -40,15 +41,24 @@ module Boilerman
       # Apply all of the passed in filters
       results = {}
 
-      # Apply controller filters
-      unless controller_filters.empty?
-        filter_list.select! do |key,_|
-          METADATA_KEYS.include?(key) || !should_filter_controller?(controller_filters, key.to_s)
+      # Apply all filters
+      filter_list.each do |controller, actions|
+        # Apply controller filters, if they exist
+        unless controller_filters.empty?
+          if METADATA_KEYS.include?(controller) || include_controller?(controller_filters, controller.to_s)
+            # Apply ignore actions filter, if it exists
+            if ignore_actions.empty?
+              results[controller] = actions
+            else
+              results[controller] = actions.reject{|action, filter| ignore_actions.include?(action) }
+            end
+          else
+            next
+          end
         end
-      end
 
-      # First we remove and controllers that aren't in the controller_filters
-      filter_list.each do |controller, action|
+        # with_filters
+
       end
 
       #if !with_actions.empty? && !without_actions.empty?
@@ -64,15 +74,14 @@ module Boilerman
       #end
 
 
-      filter_list
+      results
     end
 
     private
 
     # Returns an array of strings as controller actions
     def self.actions_from_conditional(conditionals)
-      if conditionals.size == 1
-      elsif conditionals.size > 1
+      unless conditionals.empty?
         conditionals.map do |conditional|
           conditional.scan(/'(.+?)'/).flatten
         end.flatten
@@ -83,15 +92,15 @@ module Boilerman
 
     # Only skip and call next if the controller_filters list isn't empty
     # AND the controller we're looking at is NOT in the filters.
-    def self.should_filter_controller?(filters, controller)
-      return false if filters.empty?
+    def self.include_controller?(filters, controller)
+      return true if filters.empty?
 
       filters.each do |filter|
         # check if the provided filter is a substring of the controller
-        return false if controller.downcase.include?(filter.downcase)
+        return true if controller.downcase.include?(filter.downcase)
       end
 
-      return true
+      return false
     end
 
     def self.build_controller_action_list(routes)
@@ -171,7 +180,6 @@ module Boilerman
 
         # We only care about before_actions
         controller._process_action_callbacks.select{|c| c.kind == :before}.each do |callback|
-
           # There is a slight disparity in the way conditional before_actions
           # are handled between Rails 3.2 and 4.x so we need to take this into
           # consideration here.
@@ -202,7 +210,7 @@ module Boilerman
           elsif !if_call.empty? # before_(filter|action) only: [:foo, :bar, :baz]
 
             actions_to_filter = if_call.select{|call| call.is_a?(Symbol)}
-            actions_to_filter << actions_from_conditional(if_call.select{|call| call.is_a?(Array)})
+            actions_to_filter << actions_from_conditional(if_call.select{|call| call.is_a?(String)})
 
             actions_to_filter.flatten! unless actions_to_filter.empty?
             actions_to_filter.compact! unless actions_to_filter.empty?
@@ -217,7 +225,7 @@ module Boilerman
             unless_actions = unless_call.select{|call| call.is_a?(Symbol)}
 
             # Now process any Array based conditionas
-            unless_actions << actions_from_conditional(unless_call.select{|call| call.is_a?(Array)})
+            unless_actions << actions_from_conditional(unless_call.select{|call| call.is_a?(String)})
 
             unless_actions.flatten! unless unless_actions.empty?
             unless_actions.compact! unless unless_actions.empty?
