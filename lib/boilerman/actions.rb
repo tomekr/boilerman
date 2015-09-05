@@ -48,18 +48,7 @@ module Boilerman
           if METADATA_KEYS.include?(controller) || include_controller?(controller_filters, controller.to_s)
             # Apply ignore actions filter, if it exists
             if ignore_actions.empty?
-              if ignore_filters.empty?
-                # No filters to ignore so just pass the actions hash as it
-                results[controller] = actions
-              else
-
-                # FIXME Is this idiomatic Ruby code? Feels a bit icky to me.
-                # Mapping over a hash turns it into a 2D array so we need to
-                # turn it back into a hash using the Hash[] syntax.
-                results[controller] = Hash[actions.map do |action, filters|
-                  [action, filters.reject{|filter| ignore_filters.include?(filter.to_s)}]
-                end]
-              end
+              results[controller] = actions
             else
               results[controller] = actions.reject{|action, filter| ignore_actions.include?(action) }
             end
@@ -67,10 +56,21 @@ module Boilerman
             next
           end
         end
-
-        # with_filters
-
       end
+
+      # ignore_filters
+      unless ignore_filters.empty?
+        results = results.inject(Hash.new) do |new_results, (controller, actions)|
+          # FIXME Is this idiomatic Ruby code? Feels a bit icky to me.
+          # Mapping over a hash turns it into a 2D array so we need to
+          # turn it back into a hash using the Hash[] syntax.
+          new_results[controller] = Hash[actions.map do |action, filters|
+            [action, filters.reject{|filter| ignore_filters.include?(filter.to_s)}]
+          end]
+          new_results
+        end
+      end
+
 
       #if !with_actions.empty? && !without_actions.empty?
         ## This means that both with_actions AND without_actions were specified
@@ -84,6 +84,7 @@ module Boilerman
         #next route_hash if !with_actions.include?(defaults[:action])
       #end
 
+      # show me on the actions withing filter X
 
       results
     end
