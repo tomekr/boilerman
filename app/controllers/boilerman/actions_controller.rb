@@ -6,9 +6,9 @@ module Boilerman
       params = {filters: {controller_filters: [],
                           with_actions: [],
                           without_actions: [],
-                          with_filters: [],
-                          without_filters: [],
-                          ignore_filters: ["verify_authenticity_token"],
+                          with_filters: ["test_filter1"],
+                          without_filters: ["test_filter3"],
+                          ignore_filters: [],
                           ignore_actions: []}}
 
       filters = params[:filters]

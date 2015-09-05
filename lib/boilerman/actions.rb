@@ -74,6 +74,14 @@ module Boilerman
         end
       end
 
+      # with_filters
+      unless with_filters.empty?
+        filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
+          new_results[controller] = actions.select{|action, filters| (with_filters - filters).empty? }
+          new_results
+        end
+      end
+
       filter_list
 
       #if !with_actions.empty? && !without_actions.empty?
