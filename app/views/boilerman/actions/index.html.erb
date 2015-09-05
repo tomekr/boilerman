@@ -27,9 +27,10 @@
       <% @action_filter_hash.each do |controller, actions| %>
         <tr>
 
-          <td rowspan="<%= actions.map{|_, filters| filters}.flatten.count %>"><%= controller %></td>
+          <% filter_count = actions.map{|_, filters| filters.empty? ? 1 : filters}.flatten.count %>
+
+          <td rowspan="<%= filter_count %>"><%= controller %></td>
           <% actions.each_with_index do |(action, filters),index| %>
-            <% next if filters.empty? %>
 
             <% if index == 0 %>
               <td rowspan="<%= filters.count %>"><%= action %></td>

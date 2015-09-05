@@ -9,6 +9,7 @@ module Boilerman
                           with_filters: [],
                           without_filters: [],
                           ignore_filters: [],
+                          #ignore_filters: [],
                           ignore_actions: []}}
 
       filters = params[:filters]
