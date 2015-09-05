@@ -1,5 +1,23 @@
 <div class="row">
-  <table id="controller_action_table" class="table table-bordered">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Filter</h3>
+    </div>
+    <div class="panel-body">
+
+      <%= render "boilerman/controllers/controller_filter" %>
+      <%= render "boilerman/controllers/action_filter" %>
+      <%= render "filters_filter" %>
+
+      <button onclick="clearLocalFilters()" class="btn btn-warning pull-right">Clear Filters</button>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row">
+  <table id="controller_action_table" class="table table-bordered table-condensed">
     <thead>
       <th>Controller</th>
       <th>Actions</th>

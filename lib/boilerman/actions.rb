@@ -1,6 +1,22 @@
 module Boilerman
   module Actions
-    def self.get_action_hash
+    METADATA_KEYS = [:_non_existant_route,
+                     :_method_conditionals,
+                     :_proc_conditionals,
+                     :_weird_controller]
+
+
+    def self.get_action_hash(filters)
+    controller_filters = filters[:controller_filters] || []
+
+    with_actions       = filters[:with_actions]       || []
+    without_actions    = filters[:without_actions]    || []
+
+    with_filters       = filters[:with_filters]       || []
+    without_filters    = filters[:without_filters]    || []
+
+    ignore_filters     = filters[:ignore_filters]     || []
+
       # Biggie Smalls... Biggie Smalls... Biggie Smalls....
       routes =  Rails.application.routes.routes.routes.select do |route|
         # Select routes that point to a specific controller and action. Also
@@ -12,12 +28,43 @@ module Boilerman
 
       # We only care about the defaults which will give us an array of
       # controller/action hashes. We're also going to rearrange things a bit so
-      # that the controller is the key and the value is an array of actions for that
-      # controller. This will look like:
+      # that the controller is the key and the value is an array of hashes that
+      # represent each action and it's corresponding filters. This will look
+      # like:
       #
       # {:controler_name1 => {"action1" => [filter1, filter2, ... , filterN]}}
       controller_action_hash = build_controller_action_list(routes)
-      return build_filter_list(controller_action_hash)
+
+      filter_list = build_filter_list(controller_action_hash)
+
+      # Apply all of the passed in filters
+      results = {}
+
+      # Apply controller filters
+      unless controller_filters.empty?
+        filter_list.select! do |key,_|
+          METADATA_KEYS.include?(key) || !should_filter_controller?(controller_filters, key.to_s)
+        end
+      end
+
+      # First we remove and controllers that aren't in the controller_filters
+      filter_list.each do |controller, action|
+      end
+
+      #if !with_actions.empty? && !without_actions.empty?
+        ## This means that both with_actions AND without_actions were specified
+        #next route_hash if without_actions.include?(defaults[:action])
+        #next route_hash if !with_actions.include?(defaults[:action])
+      #elsif with_actions.empty?
+        ## This means that just without_actions filtering was specified
+        #next route_hash if without_actions.include?(defaults[:action])
+      #elsif without_actions.empty?
+        ## This means that just with_action filtering was specified
+        #next route_hash if !with_actions.include?(defaults[:action])
+      #end
+
+
+      filter_list
     end
 
     private
@@ -34,6 +81,19 @@ module Boilerman
       end
     end
 
+    # Only skip and call next if the controller_filters list isn't empty
+    # AND the controller we're looking at is NOT in the filters.
+    def self.should_filter_controller?(filters, controller)
+      return false if filters.empty?
+
+      filters.each do |filter|
+        # check if the provided filter is a substring of the controller
+        return false if controller.downcase.include?(filter.downcase)
+      end
+
+      return true
+    end
+
     def self.build_controller_action_list(routes)
       routes.inject(Hash.new) do |route_hash, route|
         defaults = route.defaults
@@ -48,7 +108,6 @@ module Boilerman
           # Progression goes something like this:
           # bank_accounts => BankAccounts => BankAccountsController
           controller = ActiveSupport::Dependencies.constantize("#{ defaults[:controller].camelize }Controller")
-
         rescue NameError
           # This error will get thrown if there is a route in config/routes.rb
           # that points to a controller that doesn't actually exist.
@@ -58,10 +117,11 @@ module Boilerman
           # so we can notify the user
           route_hash[:_non_existant_route] << "#{ defaults[:controller].camelize }Controller##{ defaults[:action] }"
 
-          next # On to the next route since we don't have a controller to process
+          next route_hash # On to the next route since we don't have a controller to process
         end
 
         route_hash[controller] ||= []
+
 
         # we don't want duplicate actions in our array (this happens for PUT/PATCH routes
         route_hash[controller] << defaults[:action] unless route_hash[controller].include? defaults[:action]
@@ -70,12 +130,19 @@ module Boilerman
     end
 
     def self.build_filter_list(controller_action_hash)
+
       controller_action_filter_hash = {}
 
       # Initialize the return hash
       controller_action_hash.each do |controller, actions|
         controller_action_filter_hash[controller] = {}
-        actions.each{|a| controller_action_filter_hash[controller][a] = [] }
+
+        # With our controller_action_filter_hash being a nested hash, we want
+        # to initialize each action hash with an empty array so we can use <<
+        # in the upcoming code.
+        actions.each do |action|
+          controller_action_filter_hash[controller][action] = []
+        end
       end
 
       # Initialize metadata keys.

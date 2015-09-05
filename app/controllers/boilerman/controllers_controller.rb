@@ -5,8 +5,8 @@ module Boilerman
     before_filter :eager_load
 
     def index
-      @action_with_filters = []
-      @action_without_filters = []
+      @with_actions = []
+      @without_actions = []
       @controller_filters = []
 
       @controllers = filtered_controllers
