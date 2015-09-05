@@ -3,7 +3,7 @@ require_dependency "boilerman/application_controller"
 module Boilerman
   class ActionsController < ApplicationController
     def index
-      params = {filters: {controller_filters: ["bar"],
+      params = {filters: {controller_filters: [],
                           with_actions: [],
                           without_actions: [],
                           with_filters: [],

@@ -38,29 +38,24 @@ module Boilerman
 
       filter_list = build_filter_list(controller_action_hash)
 
-      # Apply all of the passed in filters
-      results = {}
+      # controller_filters
+      unless controller_filters.empty?
+        filter_list.select! do |controller, _|
+          METADATA_KEYS.include?(controller) || include_controller?(controller_filters, controller.to_s)
+        end
+      end
 
-      # Apply all filters
-      filter_list.each do |controller, actions|
-        # Apply controller filters, if they exist
-        unless controller_filters.empty?
-          if METADATA_KEYS.include?(controller) || include_controller?(controller_filters, controller.to_s)
-            # Apply ignore actions filter, if it exists
-            if ignore_actions.empty?
-              results[controller] = actions
-            else
-              results[controller] = actions.reject{|action, filter| ignore_actions.include?(action) }
-            end
-          else
-            next
-          end
+      # ignore_actions
+      unless ignore_actions.empty?
+        filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
+          new_results[controller] = actions.reject{|action, filter| ignore_actions.include?(action) }
+          new_results
         end
       end
 
       # ignore_filters
       unless ignore_filters.empty?
-        results = results.inject(Hash.new) do |new_results, (controller, actions)|
+        filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
           # FIXME Is this idiomatic Ruby code? Feels a bit icky to me.
           # Mapping over a hash turns it into a 2D array so we need to
           # turn it back into a hash using the Hash[] syntax.
@@ -71,6 +66,15 @@ module Boilerman
         end
       end
 
+      # without_filters
+      unless without_filters.empty?
+        filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
+          new_results[controller] = actions.select{|action, filters| (without_filters & filters).empty? }
+          new_results
+        end
+      end
+
+      filter_list
 
       #if !with_actions.empty? && !without_actions.empty?
         ## This means that both with_actions AND without_actions were specified
@@ -83,10 +87,6 @@ module Boilerman
         ## This means that just with_action filtering was specified
         #next route_hash if !with_actions.include?(defaults[:action])
       #end
-
-      # show me on the actions withing filter X
-
-      results
     end
 
     private
@@ -209,7 +209,7 @@ module Boilerman
           # present it to the user so they can check up on it themselves.
           if if_call.first.is_a?(Proc) || unless_call.first.is_a?(Proc)
             controller_action_filter_hash[:_proc_conditionals][controller] ||= []
-            controller_action_filter_hash[:_proc_conditionals][controller] << callback.filter
+            controller_action_filter_hash[:_proc_conditionals][controller] << callback.filter.to_s
             next
           end
 
@@ -217,7 +217,7 @@ module Boilerman
           # Go through and process each condition
           if if_call.empty? && unless_call.empty?
             actions.each do |action|
-              controller_action_filter_hash[controller][action] << callback.filter
+              controller_action_filter_hash[controller][action] << callback.filter.to_s
             end
           elsif !if_call.empty? # before_(filter|action) only: [:foo, :bar, :baz]
 
@@ -229,7 +229,7 @@ module Boilerman
 
             actions_to_filter.each do |action|
               next unless actions.include?(action)
-              controller_action_filter_hash[controller][action] << callback.filter
+              controller_action_filter_hash[controller][action] << callback.filter.to_s
             end
 
           elsif !unless_call.empty? # before_(filter|action) unless: [:qux]
@@ -247,12 +247,12 @@ module Boilerman
             # method
             if (actions & unless_actions).empty?
               controller_action_filter_hash[:_method_conditionals][controller] ||= []
-              controller_action_filter_hash[:_method_conditionals][controller] << {filter: callback.filter, conditional: unless_actions}
+              controller_action_filter_hash[:_method_conditionals][controller] << {filter: callback.filter.to_s, conditional: unless_actions}
               next
             end
 
             actions.reject{|a| unless_actions.include?(a)}.each do |action|
-              controller_action_filter_hash[controller][action] << callback.filter
+              controller_action_filter_hash[controller][action] << callback.filter.to_s
             end
           end
         end
