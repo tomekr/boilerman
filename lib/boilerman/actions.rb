@@ -7,16 +7,16 @@ module Boilerman
 
 
     def self.get_action_hash(filters)
-    controller_filters = filters[:controller_filters] || []
+      controller_filters = filters[:controller_filters] || []
 
-    with_actions       = filters[:with_actions]       || []
-    without_actions    = filters[:without_actions]    || []
+      with_actions       = filters[:with_actions]       || []
+      without_actions    = filters[:without_actions]    || []
 
-    with_filters       = filters[:with_filters]       || []
-    without_filters    = filters[:without_filters]    || []
+      with_filters       = filters[:with_filters]       || []
+      without_filters    = filters[:without_filters]    || []
 
-    ignore_filters     = filters[:ignore_filters]     || []
-    ignore_actions     = filters[:ignore_actions]     || []
+      ignore_filters     = filters[:ignore_filters]     || []
+      ignore_actions     = filters[:ignore_actions]     || []
 
       # Biggie Smalls... Biggie Smalls... Biggie Smalls....
       routes =  Rails.application.routes.routes.routes.select do |route|

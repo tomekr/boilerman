@@ -4,12 +4,12 @@
   <div class="col-lg-6">
     <div class="input-group">
       <span class="input-group-btn">
-        <button id="action_with_filter_input_btn" class="btn btn-success" type="button" onclick="action_with_filter()">
+        <button id="action_with_filter_input_btn" class="btn btn-success" type="button" onclick="send_with_filter()">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           With
         </button>
       </span>
-      <input id="action_with_filter_input" type="text" class="form-control" placeholder="(e.g. require_admin)" >
+      <input id="with_filter_input" type="text" class="form-control" placeholder="(e.g. require_admin)" >
     </div><!-- /input-group -->
 
     <ul class="list-group top-buffer" id="with-actions">
@@ -17,7 +17,7 @@
           <li class="list-group-item">No action filters currently set</li>
       <% else %>
         <% @with_filters.each do |with_filter| %>
-          <a href="#" onclick="removeWithActionItem()" class="list-group-item">
+          <a href="#" onclick="remove_with_filter()" class="list-group-item">
             <%= with_filter %>
             <span class="glyphicon glyphicon-remove pull-right list-group-span" aria-hidden="true"></span>
           </a>
@@ -34,7 +34,7 @@
           Without
         </button>
       </span>
-      <input id="action_without_filter_input" type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
+      <input id="without_filter_input" type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
     </div><!-- /input-group -->
 
     <ul class="list-group top-buffer" id="without-actions">
