@@ -12,7 +12,7 @@
       <input id="with_filter_input" type="text" class="form-control" placeholder="(e.g. require_admin)" >
     </div><!-- /input-group -->
 
-    <ul class="list-group top-buffer" id="with-actions">
+    <ul class="list-group top-buffer" id="with-filters">
       <% if @with_filters.empty? %>
           <li class="list-group-item">No with filters currently set</li>
       <% else %>
@@ -37,7 +37,7 @@
       <input id="without_filter_input" type="text" class="form-control" placeholder="(e.g. verify_authenticity_token)">
     </div><!-- /input-group -->
 
-    <ul class="list-group top-buffer" id="without-actions">
+    <ul class="list-group top-buffer" id="without-filters">
       <% if @without_filters.empty? %>
           <li class="list-group-item">No without filters currently set</li>
       <% else %>
