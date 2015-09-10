@@ -5,8 +5,7 @@
     </div>
     <div class="panel-body">
 
-      <%= render "boilerman/controllers/controller_filter" %>
-      <%= render "boilerman/controllers/action_filter" %>
+      <%= render "controller_filter" %>
       <%= render "filters_filter" %>
 
       <button onclick="clearLocalFilters()" class="btn btn-warning pull-right">Clear Filters</button>
@@ -19,7 +18,6 @@
 <div class="row">
   <table id="controller_action_table" class="table table-bordered table-condensed">
     <thead>
-      <th>Controller</th>
       <th>Actions</th>
       <th>Filters</th>
     </thead>
