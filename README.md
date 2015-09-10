@@ -17,6 +17,20 @@ Tracked at https://www.pivotaltracker.com/n/projects/1281714
 1. Start your application.
 1. Navigate to `http://localhost:3000/boilerman`
 
+## Console Usage
+
+# Configurable Filters:
+
+~~~
+      default_filters = { controller_filters: [], # XXX Implemented
+                          with_actions: [],
+                          without_actions: [],
+                          with_filters: [], # XXX Implemented
+                          without_filters: [], # XXX Implemented
+                          ignore_filters: [], # XXX Implemented
+                          ignore_actions: [] } # XXX Implemented
+~~~
+
 ## Force loading boilerman into a Rails console
 
 If you have access to a Rails console but for one reason or another you

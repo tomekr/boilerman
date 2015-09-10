@@ -6,7 +6,7 @@ module Boilerman
                      :_weird_controller]
 
 
-    def self.get_action_hash(filters)
+    def self.get_action_hash(filters={})
       controller_filters = filters[:controller_filters] || []
 
       with_actions       = filters[:with_actions]       || []
