@@ -78,7 +78,7 @@ When in Rails console, add the path to the $LOAD_PATH array:
 ~~~
 ➜  railsgoat git:(master) ✗ rails c
 Loading development environment (Rails 4.2.2)
-[1] pry(main)> $LOAD_PATH << "/Users/user1/.rvm/gems/ruby-2.2.1/gems/boilerman-0.1.0/lib"
+[1] pry(main)> $LOAD_PATH << "/Users/kamaji/.rvm/gems/ruby-2.2.1/gems/boilerman-0.1.0/lib"
 ~~~
 
 After adding boilerman's lib path, you can now require it in the rails
@@ -86,9 +86,12 @@ console and use it's methods. Note, this will not give you access to the
 engine and `/boilerman` path.
 
 ~~~
-TKTK this currently doesn't work because of a the loading dependency for
-bootstrap-sass
+[3] pry(main)> require 'boilerman'
+WARNING: You're probably side loading boilerman into a console.
+          Note that you will only have console access to Boilerman and will be
+          unable to access it via the /boilerman path
+=> true
+[4] pry(main)>
 ~~~
-
 
 This project uses the MIT-LICENSE.
