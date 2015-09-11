@@ -19,7 +19,7 @@ Tracked at https://www.pivotaltracker.com/n/projects/1281714
 
 ## Console Usage
 
-# Configurable Filters:
+### Configurable Filters:
 
 The currently implemented filters follow:
 
@@ -64,7 +64,7 @@ hash value
      "extrapolate_user"]
 ~~~
 
-## Force loading boilerman into a Rails console
+### Force loading boilerman into a Rails console
 
 If you have access to a Rails console but for one reason or another you
 can not modify the Gemfile of the application, you can force load
