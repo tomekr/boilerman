@@ -5,6 +5,10 @@ and authorization logic.
 
 Currently supports Rails versions 3.2 and greater.
 
+## What it looks like
+
+![Boilerman Screenshot](https://raw.github.com/tomekr/boilerman/master/screenshots/boilerman_screenshot.png)
+
 ## Features
 
 Tracked at https://www.pivotaltracker.com/n/projects/1281714
