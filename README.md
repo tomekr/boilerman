@@ -21,14 +21,47 @@ Tracked at https://www.pivotaltracker.com/n/projects/1281714
 
 # Configurable Filters:
 
+The currently implemented filters follow:
+
 ~~~
-      default_filters = { controller_filters: [], # XXX Implemented
-                          with_actions: [],
-                          without_actions: [],
-                          with_filters: [], # XXX Implemented
-                          without_filters: [], # XXX Implemented
-                          ignore_filters: [], # XXX Implemented
-                          ignore_actions: [] } # XXX Implemented
+controller_filters
+with_filters
+without_filters
+ignore_filters
+ignore_actions
+~~~
+
+Within a Rails console, you can use the following syntax:
+
+~~~
+➜  railsgoat git:(master) ✗ rails c
+Loading development environment (Rails 4.2.2)
+[1] pry(main)> Boilerman::Actions.get_action_hash
+=> {SessionsController=>
+  {"new"=>
+    ["verify_authenticity_token",
+     "set_xhr_redirected_to",
+     "set_request_method_cookie",
+     "create_analytic",
+     "mailer_options"]
+     ...
+~~~
+
+Filters can be applied by passing in filter strings into the appropriate
+hash value
+
+~~~
+[2] pry(main)> Boilerman::Actions.get_action_hash({ controller_filters: ["API"]})
+=> {Api::V1::UsersController=>
+  {"index"=>
+    ["verify_authenticity_token",
+     "set_xhr_redirected_to",
+     "set_request_method_cookie",
+     "has_info",
+     "create_analytic",
+     "mailer_options",
+     "valid_api_token",
+     "extrapolate_user"]
 ~~~
 
 ## Force loading boilerman into a Rails console
@@ -53,7 +86,8 @@ console and use it's methods. Note, this will not give you access to the
 engine and `/boilerman` path.
 
 ~~~
-TKTK this currently doesn't work
+TKTK this currently doesn't work because of a the loading dependency for
+bootstrap-sass
 ~~~
 
 
