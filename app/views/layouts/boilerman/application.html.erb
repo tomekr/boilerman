@@ -10,12 +10,12 @@
 <body>
     <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="container">
-        <%= link_to "Boilerman", '#', id: "logo" %>
+        <%= link_to "Boilerman", actions_path, id: "logo" %>
         <nav>
           <ul class="nav navbar-nav navbar-right">
             <li><%= link_to "Actions", actions_path  %></li>
             <li><%= link_to "Controllers",   controllers_path %></li>
-            <li><%= link_to "Checks",   '#' %></li>
+            <li><%= link_to "Checks",   checks_path %></li>
           </ul>
         </nav>
       </div>

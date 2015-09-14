@@ -1,0 +1,17 @@
+<div class="row">
+  <h3>The following controllers do not inhertit from: <%= @inheritance_controller%></h3>
+</div>
+
+<div class="row">
+  <ul class="list-group">
+    <% if @error %>
+      <li class="list-group-item list-group-item-danger"> <%= @error %></li>
+    <% elsif @controllers.empty? %>
+      <li class="list-group-item">All controllers inherit from <%= @inheritance_controller%></li>
+    <% else %>
+      <% @controllers.each do |controller| %>
+        <li class="list-group-item"><%= controller %></li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>

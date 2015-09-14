@@ -6,15 +6,17 @@ module Boilerman
     def self.inheritance_check(inheritance_controller="ApplicationController")
       inheritance_controller = inheritance_controller.constantize
 
-      controllers = ActionController::Metal.descendants.reject do |controller|
-        controller.parent == Boilerman || !controller.respond_to?(:_process_action_callbacks)
-      end
-
       # On top of rejecting controllers which do not have the passed in
       # inheritance_controller, we also want to reject ActionController::Base
       # as this won't be a useful result (at least I don't think it will be)
-      controllers.reject do |controller|
+      Boilerman.controllers.reject do |controller|
         controller.ancestors.include?(inheritance_controller) || controller == ActionController::Base
+      end
+    end
+
+    def self.csrf_check
+      Boilerman::Actions.get_action_hash.select do |controller, actions|
+        #TODO implement verify_authenticity_token filter checking logic
       end
     end
   end
