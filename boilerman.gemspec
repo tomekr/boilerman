@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "bootstrap-sass"
   s.add_dependency "sass-rails"
   s.add_dependency "gon"
+  s.add_dependency "responders"
 
   # TODO: Are we going to need this at some point? Might be good to use a
   # database for easier/faster querying of application data
