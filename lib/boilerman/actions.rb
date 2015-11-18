@@ -69,7 +69,7 @@ module Boilerman
       # without_filters
       unless without_filters.empty?
         filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
-          new_results[controller] = actions.select{|action, filters| (without_filters & filters).empty? }
+          new_results[controller] = actions.select{|action, filters| (without_filters & Array(filters)).empty? }
           new_results
         end
       end
@@ -77,7 +77,7 @@ module Boilerman
       # with_filters
       unless with_filters.empty?
         filter_list = filter_list.inject(Hash.new) do |new_results, (controller, actions)|
-          new_results[controller] = actions.select{|action, filters| (with_filters - filters).empty? }
+          new_results[controller] = actions.select{|action, filters| (with_filters - Array(filters)).empty? }
           new_results
         end
       end
